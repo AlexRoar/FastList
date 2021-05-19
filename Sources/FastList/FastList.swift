@@ -1,4 +1,4 @@
-class FastList<T>: CustomStringConvertible {
+public class FastList<T>: CustomStringConvertible {
     enum FastListError: Error {
         case invalidIndex(ind: UInt)
     }
@@ -53,7 +53,7 @@ class FastList<T>: CustomStringConvertible {
         storage[0].valid = false
     }
     
-    var description: String {
+    public var description: String {
         let mirror = Mirror(reflecting: self)
         var out:String = "\(mirror.subjectType) {\n"
         var indNow = storage[0].next;
