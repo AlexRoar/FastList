@@ -20,8 +20,8 @@ Add to packages in your xcode project: https://github.com/AlexRoar/FastList.git
 |------------------------	|-----------	|---------------	|---------------------	|
 | Push front             	| O(1)      	| O(1)          	| Yes                 	|
 | Push back              	| O(1)      	| O(1)          	| No                  	|
-| First insert           	| O(1)      	| O(n)          	| Yes                 	|
-| Numerous inserts       	| O(n)      	| O(n)          	| Yes                 	|
+| First middel insert       | O(1)      	| O(n)          	| Yes                 	|
+| Numerous middle inserts   | O(n)      	| O(n)          	| Yes                 	|
 | Pop back               	| O(1)      	| O(1)          	| No                  	|
 | Pop front              	| O(1)      	| O(1)          	| Yes                 	|
 | First remove at index  	| O(1)      	| O(n)          	| Yes                 	|
