@@ -8,7 +8,6 @@
 
 /* Begin PBXBuildFile section */
 		7F1ADFA326570EC700AEAD83 /* FastList.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7F1ADF9C26570EC700AEAD83 /* FastList.swift */; };
-		7F1ADFAB26570F2F00AEAD83 /* simple.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7F1ADFAA26570F2F00AEAD83 /* simple.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXCopyFilesBuildPhase section */
@@ -32,7 +31,6 @@
 		7F1ADFA626570ED100AEAD83 /* FastList.podspec */ = {isa = PBXFileReference; lastKnownFileType = text; path = FastList.podspec; sourceTree = "<group>"; };
 		7F1ADFA726570ED100AEAD83 /* CONTRIBUTING.md */ = {isa = PBXFileReference; lastKnownFileType = net.daringfireball.markdown; path = CONTRIBUTING.md; sourceTree = "<group>"; };
 		7F1ADFA826570ED100AEAD83 /* CODE_OF_CONDUCT.md */ = {isa = PBXFileReference; lastKnownFileType = net.daringfireball.markdown; path = CODE_OF_CONDUCT.md; sourceTree = "<group>"; };
-		7F1ADFAA26570F2F00AEAD83 /* simple.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = simple.swift; sourceTree = "<group>"; };
 		7F1ADFAC2657119A00AEAD83 /* LICENSE.txt */ = {isa = PBXFileReference; lastKnownFileType = text; path = LICENSE.txt; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
@@ -56,7 +54,6 @@
 				7F1ADFA626570ED100AEAD83 /* FastList.podspec */,
 				7F1ADFA226570EC700AEAD83 /* Package.swift */,
 				7F1ADF9D26570EC700AEAD83 /* README.md */,
-				7F1ADFA926570F2100AEAD83 /* Examples */,
 				7F1ADF9A26570EC700AEAD83 /* Sources */,
 				7F1ADF9F26570EC700AEAD83 /* Tests */,
 			);
@@ -92,14 +89,6 @@
 				7F1ADFA126570EC700AEAD83 /* FastListTests.swift */,
 			);
 			path = FastListTests;
-			sourceTree = "<group>";
-		};
-		7F1ADFA926570F2100AEAD83 /* Examples */ = {
-			isa = PBXGroup;
-			children = (
-				7F1ADFAA26570F2F00AEAD83 /* simple.swift */,
-			);
-			path = Examples;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -161,7 +150,6 @@
 			buildActionMask = 2147483647;
 			files = (
 				7F1ADFA326570EC700AEAD83 /* FastList.swift in Sources */,
-				7F1ADFAB26570F2F00AEAD83 /* simple.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
