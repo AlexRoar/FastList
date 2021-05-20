@@ -18,6 +18,8 @@ public class FastList<T>: CustomStringConvertible {
     var freeAreaSize:UInt;
     var freeAreaPos:UInt;
     
+    var optimized:Bool
+    
     var sumSize:UInt {
         freeAreaSize + size
     }
@@ -51,6 +53,7 @@ public class FastList<T>: CustomStringConvertible {
         storage[0].next = 0
         storage[0].prev = 0
         storage[0].valid = false
+        optimized = true
     }
     
     public var description: String {
@@ -99,6 +102,10 @@ public class FastList<T>: CustomStringConvertible {
             throw FastListError.invalidIndex(ind: pos)
         }
         let newPos = getFreePos()
+        
+        if (newPos != size + 1){
+            optimized = false
+        }
 
         storage[Int(newPos)].value = value
         storage[Int(newPos)].prev = pos
@@ -119,15 +126,19 @@ public class FastList<T>: CustomStringConvertible {
         return try insertAfter(pos: afterPos, value: value)
     }
     
-    public func pushBack(value: T) -> UInt {
+    @discardableResult public func pushBack(value: T) -> UInt {
         return try! insertAfter(pos: storage[0].prev, value: value);
     }
     
-    public func pushFront(value: T) -> UInt {
+    @discardableResult public func pushFront(value: T) -> UInt {
+        optimized = false
         return try! insertAfter(pos: 0, value: value);
     }
     
     func logicToPhysic(logic: Int, forward:Bool = true) -> Int {
+        if (optimized){
+            return logic + 1;
+        }
         var indStart = Int(forward ? storage[0].next : storage[0].prev)
         for _ in 0..<logic {
             indStart = Int(forward ? storage[indStart].next : storage[indStart].prev)
@@ -150,4 +161,8 @@ public class FastList<T>: CustomStringConvertible {
                 storage[logicToPhysic(logic: index)].value = newElm
             }
         }
+    
+    public func isOptimized() -> Bool {
+        optimized
+    }
 }

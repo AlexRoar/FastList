@@ -11,6 +11,7 @@
             
             for i in 0...1024 {
                 list.pushBack(value: i)
+                XCTAssertEqual(list.isOptimized(), true)
             }
             
             for i in 0...1024 {
@@ -24,6 +25,7 @@
             for i in 0...1024 {
                 list.pushFront(value: i)
             }
+            XCTAssertEqual(list.isOptimized(), false)
             
             for i in 0...1024 {
                 XCTAssertEqual(list[i], 1024 - i)
