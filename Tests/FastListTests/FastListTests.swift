@@ -138,8 +138,7 @@
             for _ in 0...1024 {
                 list!.pushBack(value: Leaker())
             }
-            
-            print(Leaker.counter)
+        
             
             for _ in 0...1024 {
                 list!.pushFront(value: Leaker())
@@ -208,16 +207,13 @@
         }
         
         func testlistCompareRemovalsRandom() {
-            let testSize = 20_000
+            let testSize = 200_000
             let speedTestList = {
                 var list = Array<Int>()
+                list.reserveCapacity(testSize)
                 
                 for i in 0...testSize {
                     list.append(i)
-                }
-                
-                for i in 0...testSize {
-                    let _ = list[i]
                 }
                 
                 for i in 0..<testSize {
@@ -227,22 +223,22 @@
             
             let speedTestFastList = {
                 let list = FastList<Int>()
+                list.reserveCapacity(testSize)
                 
                 for i in 0...testSize {
-                    list.pushBack(value: i)
+                    list.append(value: i)
                 }
                 
                 XCTAssertEqual(list.isOptimized(), true)
-                
-                for i in 0...testSize {
-                    let _ = list[i]
-                }
                 
                 for i in 0..<testSize {
                     try! list.remove(physical: UInt(i + 1))
                 }
             }
             
-//            XCTAssertLessThan(evaluateProblem(speedTestFastList), evaluateProblem(speedTestList))
+            let eval = (evaluateProblem(speedTestFastList), evaluateProblem(speedTestList))
+            
+            XCTAssertLessThan(eval.0, eval.1)
+            print("Remove speed difference: \(eval.0 * 100.0 / eval.1)%")
         }
     }

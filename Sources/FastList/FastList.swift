@@ -288,7 +288,7 @@ public class FastList<T>: CustomStringConvertible {
         optimized
     }
     
-    public func reserveCapacity(_ newCapacity:UInt) {
-        setCapacity(newCapacity: newCapacity > capacity ? newCapacity: capacity)
+    public func reserveCapacity(_ newCapacity:Int) {
+        setCapacity(newCapacity: UInt(newCapacity > capacity ? UInt(newCapacity): capacity))
     }
 }
