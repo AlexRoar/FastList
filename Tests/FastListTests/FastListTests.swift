@@ -61,7 +61,7 @@
             }
             
             for i in 0..<savedInd.count {
-                XCTAssertEqual(try? list.get(physic: savedInd[i].0), savedInd[i].1)
+                XCTAssertEqual(list.get(physic: savedInd[i].0), savedInd[i].1)
             }
         }
         
@@ -75,7 +75,7 @@
             }
             
             for i in 0..<savedInd.count {
-                XCTAssertEqual(try? list.get(physic: savedInd[i].0), savedInd[i].1)
+                XCTAssertEqual(list.get(physic: savedInd[i].0), savedInd[i].1)
             }
         }
         
