@@ -12,6 +12,19 @@ Fast low-level linked list
 - If data was modified not in the end, then structure operates like usual linked list: subscript and getting by logical index **in O(n)**
 - Data can be re-structured so that it is optimized again and accesses are **in O(1)** again.
 
+| Operation              	| Optimized 	| Non-optimized 	| Breaks optimisation 	|
+|------------------------	|-----------	|---------------	|---------------------	|
+| Push front             	| O(1)      	| O(1)          	| Yes                 	|
+| Push back              	| O(1)      	| O(1)          	| No                  	|
+| First insert           	| O(1)      	| O(n)          	| Yes                 	|
+| Numerous inserts       	| O(n)      	| O(n)          	| Yes                 	|
+| Pop back               	| O(1)      	| O(1)          	| No                  	|
+| Pop front              	| O(1)      	| O(1)          	| Yes                 	|
+| First remove at index  	| O(1)      	| O(n)          	| Yes                 	|
+| Numerous removes       	| O(n)      	| O(n)          	| Yes                 	|
+| Next element iteration 	| O(1)      	| O(1)          	| No                  	|
+| Optimization           	| O(1)      	| O(n)          	| No                  	|
+
 ## Speed
 
 If you make a lot of non-linear insertions/deletions, defenitely consider using this list.
