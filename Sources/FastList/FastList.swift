@@ -1,6 +1,7 @@
 public class FastList<T>: CustomStringConvertible {
     enum FastListError: Error {
         case invalidIndex(ind: UInt)
+        case underflow
     }
 
     struct ListNode {
@@ -14,6 +15,15 @@ public class FastList<T>: CustomStringConvertible {
     var storage:UnsafeMutablePointer<ListNode>
     var capacity:UInt;
     var size:UInt;
+    
+    var count: Int{
+        Int(size)
+    }
+    
+    var isEmpty: Bool{
+        size == 0
+    }
+    
     
     var freeAreaSize:UInt;
     var freeAreaPos:UInt;
@@ -32,6 +42,13 @@ public class FastList<T>: CustomStringConvertible {
             offsetPointer.deinitialize(count: 1)
             indNow = storage[Int(indNow)].next
             counter += 1;
+        }
+        
+        indNow = freeAreaPos
+        for _ in 0..<freeAreaSize {
+            let offsetPointer = storage + Int(indNow)
+            offsetPointer.deinitialize(count: 1)
+            indNow = storage[Int(indNow)].next
         }
     }
     
@@ -73,14 +90,18 @@ public class FastList<T>: CustomStringConvertible {
         return out
     }
     
+    func setCapacity(newCapacity: UInt){
+        let lastCapacity = capacity
+        capacity = newCapacity
+        let newStorage = UnsafeMutablePointer<ListNode>.allocate(capacity: Int(capacity))
+        newStorage.moveInitialize(from: storage, count: Int(lastCapacity))
+        storage.deallocate();
+        storage = newStorage
+    }
+    
     func reallocate() {
         if (size + 1 >= capacity){
-            let lastCapacity = capacity
-            capacity *= 2
-            let newStorage = UnsafeMutablePointer<ListNode>.allocate(capacity: Int(capacity))
-            newStorage.moveInitialize(from: storage, count: Int(lastCapacity))
-            storage.deallocate();
-            storage = newStorage
+            setCapacity(capacity * 2)
         }
     }
     
@@ -130,6 +151,10 @@ public class FastList<T>: CustomStringConvertible {
         return try! insertAfter(pos: storage[0].prev, value: value);
     }
     
+    @discardableResult public func append(value: T) -> UInt {
+        return try! insertAfter(pos: storage[0].prev, value: value);
+    }
+    
     @discardableResult public func pushFront(value: T) -> UInt {
         optimized = false
         return try! insertAfter(pos: 0, value: value);
@@ -154,6 +179,86 @@ public class FastList<T>: CustomStringConvertible {
             throw FastListError.invalidIndex(ind: id)
         }
         return storage[Int(id)].value
+    }
+    
+    func addFreePos(pos: Int) {
+        storage[pos].valid = false;
+        storage[pos].prev = UInt(pos);
+        storage[pos].next = UInt(pos);
+        
+        if (freeAreaSize == 0) {
+            freeAreaSize = 1;
+            freeAreaPos = UInt(pos);
+        } else {
+            freeAreaSize += 1;
+            storage[pos].next = freeAreaPos;
+            freeAreaPos = UInt(pos);
+        }
+    }
+    
+    public func set(pos: UInt, value:T) throws {
+        if (!storage[Int(pos)].valid){
+            throw FastListError.invalidIndex(ind: pos)
+        }
+        storage[Int(pos)].value = value
+    }
+    
+    public func get(pos: UInt) throws -> T {
+        if (!storage[Int(pos)].valid){
+            throw FastListError.invalidIndex(ind: pos)
+        }
+        return storage[Int(pos)].value
+    }
+    
+    public func remove(physical: UInt) throws {
+        if (size == 0){
+            throw FastListError.underflow
+        }
+        if (!storage[Int(physical)].valid){
+            throw FastListError.invalidIndex(ind: physical)
+        }
+        
+        if (physical != storage[0].prev){
+            optimized = false;
+        }
+        
+        let pos = Int(physical)
+
+        storage[Int(storage[pos].next)].prev = storage[pos].prev;
+        storage[Int(storage[pos].prev)].next = storage[pos].next;
+
+        addFreePos(pos: pos)
+        size -= 1;
+    }
+    
+    public func remove(logical: UInt) throws {
+        if (size == 0){
+            throw FastListError.underflow
+        }
+        let ind:Int? = logicToPhysic(logic: Int(logical))
+        if (ind == nil){
+            throw FastListError.invalidIndex(ind: logical)
+        }
+        try remove(physical: UInt(ind!))
+    }
+    
+    public func popBack() throws {
+        try remove(physical: storage[0].prev)
+    }
+    
+    public func popFront() throws {
+        try remove(physical: storage[0].next)
+    }
+    
+    public func clear() {
+        deinitMemory()
+        size = 0
+        freeAreaPos = 0
+        freeAreaSize = 0
+    }
+    
+    public func getSize() -> UInt {
+        size
     }
     
     @discardableResult public func insert(index:Int, value:T) throws -> UInt {
@@ -184,5 +289,9 @@ public class FastList<T>: CustomStringConvertible {
     
     public func isOptimized() -> Bool {
         optimized
+    }
+    
+    public func reserveCapacity(_ newCapacity:UInt) {
+        setCapacity(newCapacity: newCapacity > capacity ? newCapacity: capacity)
     }
 }
