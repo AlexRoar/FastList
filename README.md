@@ -36,3 +36,77 @@ Remove speed difference: 35%
 Remove random speed difference: 40%
 Insert front speed difference: 16%
 ```
+
+## Usage
+
+```swift
+let list = FastList<Int>()
+
+for i in 0...5 {
+    list.append(value: i * i)
+}
+
+for i in 0...5 {
+    list.appendFront(value: i * i * i) // breaks optimization
+}
+
+print(list)
+for i in list {
+    print(i!)
+}
+
+for i in 0..<list.count {
+    print(list[i]!) // O(n) subscript
+}
+
+list.optimize()
+print(list) // the same list, optimized representation
+
+for i in 0..<list.count {
+    print(list[i]!) // O(1) subscript
+}
+
+while(!list.isEmpty) {
+    try! list.remove(logic: 0)
+}
+
+print(list)
+```
+
+Output:
+
+```
+FastList<Int> {
+125, 64, 27, 8, 1, 0, 0, 1, 4, 9, 16, 25
+}
+125
+64
+27
+8
+1
+0
+0
+1
+4
+9
+16
+25
+FastList<Int> {
+125, 64, 27, 8, 1, 0, 0, 1, 4, 9, 16, 25
+}
+125
+64
+27
+8
+1
+0
+0
+1
+4
+9
+16
+25
+FastList<Int> {
+
+}
+```
