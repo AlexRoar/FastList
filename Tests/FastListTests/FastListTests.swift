@@ -28,7 +28,7 @@
             let list = FastList<Int>(capacity: 0)
             
             for i in 0...1024 {
-                list.pushBack(value: i)
+                list.append(value: i)
                 XCTAssertEqual(list.isOptimized(), true)
             }
             
@@ -42,7 +42,7 @@
             let list = FastList<Int>(capacity: 0)
             
             for i in 0...1024 {
-                list.pushFront(value: i)
+                list.appendFront(value: i)
             }
             XCTAssertEqual(list.isOptimized(), false)
             
@@ -57,7 +57,7 @@
             var savedInd:[(UInt, Int)] = []
             
             for i in 0...1024 {
-                savedInd.append((list.pushBack(value: i), i))
+                savedInd.append((list.append(value: i), i))
             }
             
             for i in 0..<savedInd.count {
@@ -71,7 +71,7 @@
             var savedInd:[(UInt, Int)] = []
             
             for i in 0...1024 {
-                savedInd.append((list.pushFront(value: i), i))
+                savedInd.append((list.appendFront(value: i), i))
             }
             
             for i in 0..<savedInd.count {
@@ -83,10 +83,10 @@
             var list:FastList? = FastList<Leaker>(capacity: 0)
             
             for _ in 0...1024 {
-                list!.pushBack(value: Leaker())
+                list!.append(value: Leaker())
             }
             for _ in 0...1024 {
-                list!.pushFront(value: Leaker())
+                list!.appendFront(value: Leaker())
             }
             
             list = nil
@@ -99,11 +99,11 @@
             
             
             for _ in 0...1024 {
-                list!.pushBack(value: Leaker())
+                list!.append(value: Leaker())
             }
             
             for _ in 0...1024 {
-                list!.pushFront(value: Leaker())
+                list!.appendFront(value: Leaker())
             }
             
             try! list!.remove(physic: 2)
@@ -119,11 +119,11 @@
             
             
             for _ in 0...1024 {
-                list!.pushBack(value: Leaker())
+                list!.append(value: Leaker())
             }
             
             for _ in 0...1024 {
-                list!.pushFront(value: Leaker())
+                list!.appendFront(value: Leaker())
             }
             
             list = nil
@@ -136,19 +136,19 @@
             
             
             for _ in 0...1024 {
-                list!.pushBack(value: Leaker())
+                list!.append(value: Leaker())
             }
         
             
             for _ in 0...1024 {
-                list!.pushFront(value: Leaker())
+                list!.appendFront(value: Leaker())
             }
             
             try! list!.remove(physic: 2)
             try! list!.remove(physic: 20)
             
             for _ in 0...1024 {
-                list!.pushFront(value: Leaker())
+                list!.appendFront(value: Leaker())
             }
             list = nil
             XCTAssertEqual(Leaker.counter, 0)
@@ -189,7 +189,7 @@
                 let list = FastList<Int>()
                 
                 for i in 0...testSize {
-                    list.pushBack(value: i)
+                    list.append(value: i)
                 }
                 
                 XCTAssertEqual(list.isOptimized(), true)
@@ -261,7 +261,7 @@
                 list.reserveCapacity(testSize)
                 
                 for i in 0...testSize {
-                    list.pushFront(value: i)
+                    list.appendFront(value: i)
                 }
             }
             
@@ -291,7 +291,7 @@
             let list = FastList<Int>()
             
             for i in 0...testSize {
-                list.pushBack(value: i)
+                list.append(value: i)
             }
             
             var count = 0
@@ -315,7 +315,7 @@
             let list = FastList<Int>()
             
             for i in 0...testSize {
-                list.pushFront(value: i)
+                list.appendFront(value: i)
             }
             
             XCTAssertFalse(list.isOptimized())
@@ -341,7 +341,7 @@
             let list = FastList<Int>()
             
             for i in 0...testSize {
-                list.pushBack(value: i)
+                list.append(value: i)
             }
             
             XCTAssertTrue(list.isOptimized())
@@ -377,5 +377,43 @@
                 }
                 XCTAssertEqual(list[i], i + add)
             }
+        }
+        
+        func testExample() {
+            let list = FastList<Int>()
+
+            for i in 0...5 {
+                list.append(value: i * i)
+            }
+
+            let hundredId = list.append(value: 100) // access id to 100
+
+            try! list.set(physic: hundredId, value: 101) // O(1) always
+
+            for i in 0...5 {
+                list.appendFront(value: i * i * i) // breaks optimization
+            }
+
+            print(list)
+            for i in list {
+                print(i!)
+            }
+
+            for i in 0..<list.count {
+                print(list[i]!) // O(n) subscript
+            }
+
+            list.optimize()
+            print(list) // the same list, optimized representation
+
+            for i in 0..<list.count {
+                print(list[i]!) // O(1) subscript
+            }
+
+            while(!list.isEmpty) {
+                try! list.remove(logic: 0)
+            }
+
+            print(list)
         }
     }

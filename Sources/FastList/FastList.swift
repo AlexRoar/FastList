@@ -86,7 +86,7 @@ public class FastList<T>: CustomStringConvertible, Collection, Sequence {
         var indNow = storage[0].next;
         var counter = 0;
         while(indNow != 0 && counter < size) {
-            out += "\(String(describing: storage[Int(indNow)].value))"
+            out += "\(String(describing: storage[Int(indNow)].value!))"
             if (counter != size - 1){
                 out += ", "
             }
@@ -156,15 +156,11 @@ public class FastList<T>: CustomStringConvertible, Collection, Sequence {
         return try insertAfter(pos: afterPos, value: value)
     }
     
-    @discardableResult public func pushBack(value: T) -> UInt {
-        return try! insertAfter(pos: storage[0].prev, value: value);
-    }
-    
     @discardableResult public func append(value: T) -> UInt {
         return try! insertAfter(pos: storage[0].prev, value: value);
     }
     
-    @discardableResult public func pushFront(value: T) -> UInt {
+    @discardableResult public func appendFront(value: T) -> UInt {
         optimized = false
         return try! insertAfter(pos: 0, value: value);
     }
@@ -295,6 +291,9 @@ public class FastList<T>: CustomStringConvertible, Collection, Sequence {
     }
     
     public func optimize() {
+        if (optimized){
+            return
+        }
         let newStorage = UnsafeMutablePointer<ListNode>.allocate(capacity: Int(capacity))
         newStorage.initialize(repeating: ListNode(), count: Int(capacity))
         
