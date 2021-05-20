@@ -1,3 +1,3 @@
 # FastList
 
-A description of this package.
+Fast low-level linked list
