@@ -1,5 +1,4 @@
 public class FastList<T>: CustomStringConvertible, Collection, Sequence {
-    
     public func index(after i: Int) -> Int {
         Int(storage[i].next)
     }
@@ -197,14 +196,11 @@ public class FastList<T>: CustomStringConvertible, Collection, Sequence {
         storage[pos].prev = UInt(pos);
         storage[pos].next = UInt(pos);
         
-        if (freeAreaSize == 0) {
-            freeAreaSize = 1;
-            freeAreaPos = UInt(pos);
-        } else {
-            freeAreaSize += 1;
+        if (freeAreaSize != 0) {
             storage[pos].next = freeAreaPos;
-            freeAreaPos = UInt(pos);
         }
+        freeAreaSize += 1;
+        freeAreaPos = UInt(pos);
     }
     
     public func set(physic: UInt, value:T) throws {
@@ -296,5 +292,33 @@ public class FastList<T>: CustomStringConvertible, Collection, Sequence {
     
     public func reserveCapacity(_ newCapacity:Int) {
         setCapacity(newCapacity: UInt(newCapacity > capacity ? UInt(newCapacity): capacity))
+    }
+    
+    public func optimize() {
+        let newStorage = UnsafeMutablePointer<ListNode>.allocate(capacity: Int(capacity))
+        newStorage.initialize(repeating: ListNode(), count: Int(capacity))
+        
+        var nowPos = storage[0].next
+            
+        for i in 0..<count {
+            newStorage[i + 1].value = storage[Int(nowPos)].value
+            newStorage[i + 1].valid = true
+            newStorage[i + 1].prev = UInt(i)
+            newStorage[i].next = UInt(i + 1)
+            
+            nowPos = storage[Int(nowPos)].next
+        }
+        storage.initialize(repeating: ListNode(), count: Int(sumSize))
+        
+        newStorage[0].prev = size
+        newStorage[count].next = 0
+        
+        optimized = true
+        freeAreaPos = 0
+        freeAreaSize = 0
+        
+        storage.deinitialize(count: Int(capacity))
+        storage.deallocate()
+        storage = newStorage
     }
 }

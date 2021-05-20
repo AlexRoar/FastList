@@ -167,7 +167,7 @@
         }
         
         func testlistCompareRemovals() {
-            let testSize = 200_000
+            let testSize = 100_000
             let speedTestList = {
                 var list = Array<Int>()
                 
@@ -210,7 +210,7 @@
         }
         
         func testlistCompareRemovalsRandom() {
-            let testSize = 200_000
+            let testSize = 100_000
             let speedTestList = {
                 var list = Array<Int>()
                 list.reserveCapacity(testSize)
@@ -246,7 +246,7 @@
         }
         
         func testpushFront() {
-            let testSize = 300_000
+            let testSize = 100_000
             let speedTestList = {
                 var list = Array<Int>()
                 list.reserveCapacity(testSize)
@@ -283,6 +283,99 @@
             for i in list {
                 XCTAssertEqual(i, count)
                 count += 1
+            }
+        }
+        
+        func testoptimizationBasic () {
+            let testSize = 100_000
+            let list = FastList<Int>()
+            
+            for i in 0...testSize {
+                list.pushBack(value: i)
+            }
+            
+            var count = 0
+            
+            for i in list {
+                XCTAssertEqual(i, count)
+                count += 1
+            }
+            
+            list.optimize()
+            XCTAssertTrue(list.isOptimized())
+            
+            for i in list {
+                XCTAssertEqual(i, count)
+                count += 1
+            }
+        }
+        
+        func testoptimizationFront () {
+            let testSize = 100_000
+            let list = FastList<Int>()
+            
+            for i in 0...testSize {
+                list.pushFront(value: i)
+            }
+            
+            XCTAssertFalse(list.isOptimized())
+            
+            var count = 0
+            
+            for i in list {
+                XCTAssertEqual(i, count)
+                count += 1
+            }
+            
+            list.optimize()
+            XCTAssertTrue(list.isOptimized())
+            
+            for i in list {
+                XCTAssertEqual(i, count)
+                count += 1
+            }
+        }
+        
+        func testoptimizationRandRemovals () {
+            let testSize = 100_000
+            let list = FastList<Int>()
+            
+            for i in 0...testSize {
+                list.pushBack(value: i)
+            }
+            
+            XCTAssertTrue(list.isOptimized())
+            
+            var count = 0
+            
+            for i in list {
+                XCTAssertEqual(i, count)
+                count += 1
+            }
+            
+            var removed = Set<Int>()
+            
+            for _ in 0...100 {
+                var indPhy = Int.random(in: 1...list.count)
+                while (removed.contains(indPhy)) {
+                    indPhy = Int.random(in: 1...list.count)
+                }
+                removed.insert(indPhy)
+                XCTAssertNoThrow(try list.remove(physic: UInt(indPhy)))
+            }
+        
+            
+            XCTAssertFalse(list.isOptimized())
+            list.optimize()
+            XCTAssertTrue(list.isOptimized())
+        
+            
+            var add:Int = 0
+            for i in 0..<list.count {
+                while (removed.contains(i + add + 1)){
+                    add += 1
+                }
+                XCTAssertEqual(list[i], i + add)
             }
         }
     }
