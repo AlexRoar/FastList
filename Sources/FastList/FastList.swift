@@ -5,11 +5,18 @@ public class FastList<T>: CustomStringConvertible {
     }
 
     struct ListNode {
-        var value:T;
+        var value:T?;
         var valid:Bool;
         
         var next:UInt;
         var prev:UInt;
+        
+        init(){
+            value = nil
+            valid = false
+            next = 0
+            prev = 0
+        }
     }
     
     var storage:UnsafeMutablePointer<ListNode>
@@ -34,26 +41,12 @@ public class FastList<T>: CustomStringConvertible {
         freeAreaSize + size
     }
     
-    func deinitMemory() {
-        var indNow = storage[0].next;
-        var counter = 0;
-        while(indNow != 0 && counter < size) {
-            let offsetPointer = storage + Int(indNow)
-            offsetPointer.deinitialize(count: 1)
-            indNow = storage[Int(indNow)].next
-            counter += 1;
-        }
-        
-        indNow = freeAreaPos
-        for _ in 0..<freeAreaSize {
-            let offsetPointer = storage + Int(indNow)
-            offsetPointer.deinitialize(count: 1)
-            indNow = storage[Int(indNow)].next
-        }
+    func initMemory(pointer: UnsafeMutablePointer<ListNode>, size: UInt){
+        pointer.initialize(repeating: ListNode(), count: Int(size))
     }
     
     deinit {
-        deinitMemory();
+        storage.deinitialize(count: Int(capacity))
         storage.deallocate();
     }
 
@@ -66,11 +59,13 @@ public class FastList<T>: CustomStringConvertible {
         if (capacity == 0){
             capacity = 1
         }
+        optimized = true
         storage = UnsafeMutablePointer<ListNode>.allocate(capacity: Int(capacity))
+        initMemory(pointer: storage, size: capacity)
         storage[0].next = 0
         storage[0].prev = 0
         storage[0].valid = false
-        optimized = true
+        
     }
     
     public var description: String {
@@ -79,7 +74,7 @@ public class FastList<T>: CustomStringConvertible {
         var indNow = storage[0].next;
         var counter = 0;
         while(indNow != 0 && counter < size) {
-            out += "\(storage[Int(indNow)].value)"
+            out += "\(String(describing: storage[Int(indNow)].value))"
             if (counter != size - 1){
                 out += ", "
             }
@@ -95,6 +90,8 @@ public class FastList<T>: CustomStringConvertible {
         capacity = newCapacity
         let newStorage = UnsafeMutablePointer<ListNode>.allocate(capacity: Int(capacity))
         newStorage.moveInitialize(from: storage, count: Int(lastCapacity))
+        initMemory(pointer: newStorage.advanced(by: Int(lastCapacity)),
+                   size: (capacity - lastCapacity))
         storage.deallocate();
         storage = newStorage
     }
@@ -178,10 +175,11 @@ public class FastList<T>: CustomStringConvertible {
         if (id > capacity || !storage[Int(id)].valid){
             throw FastListError.invalidIndex(ind: id)
         }
-        return storage[Int(id)].value
+        return storage[Int(id)].value!
     }
     
     func addFreePos(pos: Int) {
+        storage[pos].value = nil
         storage[pos].valid = false;
         storage[pos].prev = UInt(pos);
         storage[pos].next = UInt(pos);
@@ -207,7 +205,7 @@ public class FastList<T>: CustomStringConvertible {
         if (!storage[Int(pos)].valid){
             throw FastListError.invalidIndex(ind: pos)
         }
-        return storage[Int(pos)].value
+        return storage[Int(pos)].value!
     }
     
     public func remove(physical: UInt) throws {
@@ -251,7 +249,6 @@ public class FastList<T>: CustomStringConvertible {
     }
     
     public func clear() {
-        deinitMemory()
         size = 0
         freeAreaPos = 0
         freeAreaSize = 0
