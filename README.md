@@ -4,6 +4,10 @@ Fast low-level linked list
 
 **Confroms to `CustomStringConvertible`, `Collection`, and `Sequence` protocols**
 
+## Install 
+
+Add to packages in your xcode project: https://github.com/AlexRoar/FastList.git
+
 ## Algo & Features
 
 - All nodes are stored in uniform memory chunk and link each-other by indices. Therefore, list is easily copyable and cache-friendly.
