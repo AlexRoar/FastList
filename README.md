@@ -46,6 +46,10 @@ for i in 0...5 {
     list.append(value: i * i)
 }
 
+let hundredId = list.append(value: 100) // access id to 100
+
+try! list.set(physic: hundredId, value: 101) // O(1) always
+
 for i in 0...5 {
     list.appendFront(value: i * i * i) // breaks optimization
 }
@@ -77,7 +81,7 @@ Output:
 
 ```
 FastList<Int> {
-125, 64, 27, 8, 1, 0, 0, 1, 4, 9, 16, 25
+125, 64, 27, 8, 1, 0, 0, 1, 4, 9, 16, 25, 101
 }
 125
 64
@@ -91,8 +95,9 @@ FastList<Int> {
 9
 16
 25
+101
 FastList<Int> {
-125, 64, 27, 8, 1, 0, 0, 1, 4, 9, 16, 25
+125, 64, 27, 8, 1, 0, 0, 1, 4, 9, 16, 25, 101
 }
 125
 64
@@ -106,6 +111,7 @@ FastList<Int> {
 9
 16
 25
+101
 FastList<Int> {
 
 }
