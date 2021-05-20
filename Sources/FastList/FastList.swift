@@ -135,9 +135,12 @@ public class FastList<T>: CustomStringConvertible {
         return try! insertAfter(pos: 0, value: value);
     }
     
-    func logicToPhysic(logic: Int, forward:Bool = true) -> Int {
+    public func logicToPhysic(logic: Int, forward:Bool = true) -> Int? {
         if (optimized){
             return logic + 1;
+        }
+        if (logic >= size){
+            return nil
         }
         var indStart = Int(forward ? storage[0].next : storage[0].prev)
         for _ in 0..<logic {
@@ -153,12 +156,29 @@ public class FastList<T>: CustomStringConvertible {
         return storage[Int(id)].value
     }
     
-    public subscript(index:Int) -> T {
-            get {
-                storage[logicToPhysic(logic: index)].value
+    @discardableResult public func insert(index:Int, value:T) throws -> UInt {
+        let ind:Int? = logicToPhysic(logic: index)
+        if (ind == nil){
+            throw FastListError.invalidIndex(ind: UInt(index))
+        }
+        
+        return try insertBefore(pos: UInt(ind!), value: value)
+    }
+    
+    public subscript(index:Int) -> T? {
+        get {
+            let ind:Int? = logicToPhysic(logic: index)
+            if (ind == nil){
+                return nil
             }
+            return storage[ind!].value
+        }
         set(newElm) {
-                storage[logicToPhysic(logic: index)].value = newElm
+            let ind:Int? = logicToPhysic(logic: index)
+            if (ind == nil){
+                return
+            }
+            storage[ind!].value = newElm!
             }
         }
     
