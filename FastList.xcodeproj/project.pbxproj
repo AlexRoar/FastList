@@ -24,7 +24,7 @@
 /* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
-		7F1ADF9926570EC600AEAD83 /* FastList */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.executable"; includeInIndex = 0; path = FastList; sourceTree = BUILT_PRODUCTS_DIR; };
+		7F1ADF9926570EC600AEAD83 /* FastList */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.executable"; includeInIndex = 0; name = FastList; path = /Users/alexroar/Desktop/Dev/SwiftPlayground/FastList/build/Debug/FastList; sourceTree = "<absolute>"; };
 		7F1ADF9C26570EC700AEAD83 /* FastList.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FastList.swift; sourceTree = "<group>"; };
 		7F1ADF9D26570EC700AEAD83 /* README.md */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = net.daringfireball.markdown; path = README.md; sourceTree = "<group>"; };
 		7F1ADFA126570EC700AEAD83 /* FastListTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FastListTests.swift; sourceTree = "<group>"; };
@@ -50,16 +50,15 @@
 		7F1ADF8626570E6900AEAD83 = {
 			isa = PBXGroup;
 			children = (
-				7F1ADFA926570F2100AEAD83 /* Examples */,
 				7F1ADFA826570ED100AEAD83 /* CODE_OF_CONDUCT.md */,
 				7F1ADFA726570ED100AEAD83 /* CONTRIBUTING.md */,
 				7F1ADFAC2657119A00AEAD83 /* LICENSE.txt */,
 				7F1ADFA626570ED100AEAD83 /* FastList.podspec */,
 				7F1ADFA226570EC700AEAD83 /* Package.swift */,
 				7F1ADF9D26570EC700AEAD83 /* README.md */,
+				7F1ADFA926570F2100AEAD83 /* Examples */,
 				7F1ADF9A26570EC700AEAD83 /* Sources */,
 				7F1ADF9F26570EC700AEAD83 /* Tests */,
-				7F1ADF9926570EC600AEAD83 /* FastList */,
 			);
 			sourceTree = "<group>";
 		};
