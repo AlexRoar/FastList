@@ -101,7 +101,7 @@ public class FastList<T>: CustomStringConvertible {
     
     func reallocate() {
         if (size + 1 >= capacity){
-            setCapacity(capacity * 2)
+            setCapacity(newCapacity: capacity * 2)
         }
     }
     
